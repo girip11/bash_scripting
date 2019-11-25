@@ -6,7 +6,10 @@
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 80,
     "editor.wrappingIndent": "none",
-    "editor.renderWhitespace": "all"
+    "editor.renderWhitespace": "all",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.markdownlint": true
+    }
   },
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
