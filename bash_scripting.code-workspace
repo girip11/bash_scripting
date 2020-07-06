@@ -5,6 +5,26 @@
     }
   ],
   "settings": {
+    "[bash]": {
+      "editor.formatOnSave": true
+    },
+    "[markdown]": {
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+        "source.fixAll.markdownlint": true
+      },
+      "editor.wordWrap": "wordWrapColumn",
+      "editor.wrappingIndent": "none"
+    },
+
+    "editor.tabSize": 4,
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 80,
+    "editor.fontSize": 16,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.renderWhitespace": "all",
+
     "terminal.integrated.rendererType": "dom",
     "git.autorefresh": true,
     "markdownlint.ignore": ["**/*.md.html"],
