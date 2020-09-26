@@ -28,6 +28,9 @@ set -xv
 set +xv
 
 # help set or set --help to know more about the various shell options available.
+
+# Flags set in the current shell can be found in $-
+echo $-
 ```
 
 ## Shell prompts
@@ -58,6 +61,10 @@ man -f bash
 # apropos searches short description in man page using passed argument as the keyword. `man -k <keyword/command>` does the same
 apropos bash
 man -k bash
+
+# This works with regex as well
+apropos ^cat$
+man -k ^cat$
 ```
 
 ---
