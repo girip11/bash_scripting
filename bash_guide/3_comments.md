@@ -40,15 +40,33 @@ echo $str2
 
 ## Internal Field Separator(IFS)
 
-Default IFS are space(' '), tabs('\t') and newlines('\n').
+Default `IFS` are space(`' '`), tabs(`\t`) and newlines(`\n`). [`IFS`](https://bash.cyberciti.biz/guide/IFS) variable is commonly used with `read` command, **parameter expansions** and **command substitution**.
 
 ```Bash
-# ceching IFS settings in a shell
 printf %q "$IFS"
 
+# Store IFS settings in a shell before changing its value.
 # setting IFS to custom value
 # helps delimit comma separated values.
 IFS=,
+```
+
+* When we use `"$*"`, all the parameters are joined by the value present in `IFS`
+
+```Bash
+function print_params() {
+    echo "$*"
+    return
+}
+
+OLD_IFS=$IFS
+IFS='|'
+
+# outputs hello|world
+print_params hello world
+
+# restore
+IFS=$OLD_IFS
 ```
 
 ---
