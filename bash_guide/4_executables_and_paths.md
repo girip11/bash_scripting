@@ -2,7 +2,7 @@
 
 ## Executables and paths
 
-`$PATH` environment variable is used to find binaries to be executed. It is not recommended to add user scripts to `$PATH`. **If absolutely necessary, add the new path to the end of current list of paths.** Env variable paths are searched using values in `$PATH` from left to right. Usually binaries are executed in their own subshell.
+`$PATH` environment variable is used to find binaries to be executed. It is not recommended to add user scripts to `$PATH`. **If absolutely necessary, add the new path to the end of current list of paths.** Env variable paths are searched using values in `$PATH` from left to right. **Usually binaries are executed in their own subshell**.
 
 ```Bash
 # bash binary is found inside /bin which is part of $PATH variable
@@ -11,11 +11,20 @@ bash -c "echo \"Hello world\""
 /bin/bash -c "echo \"Hello world\""
 ```
 
+* To find out if the executable is available on `PATH`, we can use the `which` command. `man which` for more details on the `which` command
+
+```Bash
+# path to the bash executable found by searching PATH env.
+which bash
+```
+
 ## Builtins
 
-Commands builtin to bash itself. Doesnot require searching in path for execution. Examples are **alias**, **cd**, **echo**, **read**, **type** etc
+Commands builtin to bash itself. Doesnot require searching in `PATH` for execution. Examples are **alias**, **cd**, **echo**, **read**, **type** etc
 
-To know about all the bash builtins use the command `man builtins`
+To know about all the bash builtins use the command `man builtins`.
+
+> bash  defines  the following built-in commands: `:, ., [, alias, bg, bind, break, builtin, case, cd, command, compgen, complete, continue, declare, dirs, disown, echo, enable, eval, exec, exit, export, fc, fg, getopts, hash, help, history, if, jobs, kill,  let,  local,  logout,  popd,  printf, pushd,  pwd, read,  readonly, return, set, shift, shopt, source, suspend, test, times, trap, type, typeset, ulimit, umask, unalias, unset, until, wait, while`
 
 ## Scripts
 
@@ -23,7 +32,7 @@ Series of commands stored in a file and usually executed in a shell non interact
 
 ## alias
 
-Aliases help shorten long commands. If defined in a script or shell, alias is visible only within the script or shell. To make available to all shell, we have to add the alias settings to file like **.bashrc**
+Aliases help shorten long commands. If defined in a script or shell, alias is visible only within the script or shell. To make available to all the shells, we have to add the alias settings to bash config files like **.bashrc**
 
 ```Bash
 #  List all aliases
