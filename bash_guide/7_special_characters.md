@@ -112,9 +112,9 @@ echo $((result == 7))
 echo $(($result == 7)) # in arithmetic expression parameter dereferencing($) is optional
 ```
 
-**NOTE**: Commands groups and arithmetic expression can be expanded by preceding them with **$**. This is referred to as **command substitution and arithmetic expansion** respectively
+**NOTE**: Commands groups and arithmetic expression can be expanded by preceding them with **$**. This is referred to as **command substitution and arithmetic expansion** respectively.
 
-## let built-in
+## `let` built-in
 
 **let** is a built-in command for math operations.
 let builtin enforces strict spacing while **Arithmetic expression** doesn't.  

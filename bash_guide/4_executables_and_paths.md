@@ -46,6 +46,8 @@ alias install="sudo apt install"
 install vim
 ```
 
+* To remove the alias, `unalias` shell builtin is used.
+
 ## Standard streams
 
 * stdin - standard input stream. By default its keyboard. File descriptor is 0.
