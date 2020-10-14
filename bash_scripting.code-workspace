@@ -35,6 +35,11 @@
     "shellcheck.enable": true,
     "shellcheck.useWorkspaceRootAsCwd": true,
     "shellcheck.run": "onSave",
-    "shellformat.flag": "-i 2 -ci -sr -bn"
+    "shellformat.flag": "-i 2 -ci -sr -bn",
+
+    //pdf settings
+    "latex-workshop.view.pdf.invertMode.enabled": "always",
+    "latex-workshop.view.pdf.invert": 0.8,
+    "latex-workshop.view.pdf.backgroundColor": "#dcdcdc" //"#3b3537"
   }
 }

@@ -74,7 +74,7 @@ echo $msg
 
 ## Commonly used Shell variables
 
-To list the shell variables use the command `declare -p`
+To list the shell variables use the command `declare -p`. More on these shell variables can be found in the **chapter-9** on [Advanced bash scripting guide](books/../../books/advanced_bash_scripting_guide.pdf)
 
 * $BASH
 * $BASH_VERSION
