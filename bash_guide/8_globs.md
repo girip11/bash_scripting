@@ -1,17 +1,19 @@
 # Chapter-8: Globs
 
 Globs(wildcards) are not regular expressions. These are wildcards for searching files. **Glob characters helps in pathname expansion.**
-If one of the below characters appear, then the word is considered as a pattern and is replaced with matching files sorted alphabetically.
+If one of the below characters appear, then the word is considered as a pattern and is replaced with matching files sorted **alphabetically**.
 
 **NOTE**: globbing/pathname expansion **doesnot work as expected inside either single or double quotes.**
 
 ```Bash
-echo *.java
-echo '*.java'
-echo "*.java"
-
 # Note the difference when globs are put inside quotes
 # and used without quotes
+
+# Does path name expansion and prints all file names ending with .java
+echo *.java
+echo '*.java' # prints *.java
+echo "*.java" # prints *.java
+
 
 # Here the pattern is expanded to all the files in
 # directory /etc/cron.d and made in to a single string
@@ -26,23 +28,22 @@ for file in /etc/cron.d/*
 do
   echo "$file"
 done
-
 ```
 
 ## Glob characters
 
-* **?** - matches a single character against any value(wildcard character)
-* **\*** - matches any number of characters with any value(wildcard string)
-* **[]** - matches a single character for a list of values or ranges (wildcard list)
+* `?` - matches a single character against any value(wildcard character)
+* `*` - matches any number of characters with any value(wildcard string)
+* `[]` - matches a single character for a list of values or ranges (wildcard list)
 
-## **?** glob
+## `?` glob
 
 ```Bash
 # list all the file in the current directory
-ls 'doc?.md'
+ls doc?.md
 ```
 
-## **\*** glob
+## `*` glob
 
 ```Bash
 # prints all files/folders in the current folder
@@ -54,11 +55,12 @@ rm *
 
 **NOTE**: Neither of the above mentioned wilcards match **/**.
 
-## **[]** glob
+## `[]` glob
 
 ```Bash
 # any number of individual characters
-# match any file/folder inside /usr/bin starting with either e or g or p followed by any number of characters
+# match any file/folder inside /usr/bin starting with either
+# e or g or p followed by any number of characters
 ls /usr/bin/[egp]*
 
 # range example. range also matches a single character only with a range of values
@@ -74,7 +76,7 @@ ls /usr/bin/*[\[\]]
 
 ## null globs
 
-when a glob doesnot match a filenames, glob matches itself (i.e) glob expands to itself. But if nullglob shell option is enabled, **the glob incase of no match expands to null instead of itself.**
+when a glob doesnot match any of the filenames, glob matches itself (i.e) glob expands to itself. But if nullglob shell option is enabled, **the glob incase of no match expands to null instead of itself.**
 
 ```Bash
 for file in *.txt
@@ -116,11 +118,11 @@ shopt -u extglob
 
 Extended glob matching patterns
 
-* **?(list)** - matches zero or one occurence of the patterns in the same string
-* **\*(list)** - matches zero or many occurence of the patterns in the same string
-* **+(list)** - matches atleast one occurence of the patterns in the same string
-* **@(list)** - matches exactly one occurence of the patterns in the same string
-* **!(list)** - matches anything other than the patterns mentioned in the same string
+* `?(list)` - matches zero or one occurence of the patterns in the same string
+* `*(list)` - matches zero or many occurence of the patterns in the same string
+* `+(list)` - matches atleast one occurence of the patterns in the same string
+* `@(list)` - matches exactly one occurence of the patterns in the same string
+* `!(list)` - matches anything other than the patterns mentioned in the same string
 
 ```Bash
 $ ls
@@ -134,9 +136,16 @@ abc ac
 $ echo a@(b)c
 abc
 
-# list all directories starting with lowercase alphabets and containing atleast one "l" in the string and ends with either "s" or "e"
+# list all directories starting with lowercase alphabets and containing
+# atleast one "l" in the string and ends with either "s" or "e"
 echo [[:lower:]]*+(l)*@(s|e)
 ```
+
+* `**` - Feature known as **globstar**. Matches all files and zero or more directories and subdirectories. If followed by a `/` it matches only directories and subdirectories. **To work that way it must be the only thing inside the path part e.g. `/myapp/**.js` will not work that way.**
+
+* `{}` - Brace expansion. `**/*.{a,b}` will be expanded to `**/*.a` and `**/*.b`. `**/*.{a..c}` will be expanded to `**/*.a`, `**/*.b` and `**/*.c`. The final result is the union of checking all the expanded patterns.
+
+To play with globs we can use [globster](https://globster.xyz/)
 
 ---
 

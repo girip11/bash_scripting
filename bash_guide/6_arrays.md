@@ -4,7 +4,7 @@
 
 ### Declaration and initialization
 
-Array index starts from 0.
+Array index starts from 0. Arrays also support negative indices. Just like in python -1 points to the last element in the array.
 
 ```Bash
 # declares an empty array
@@ -40,6 +40,9 @@ array[5]="Item5"
 
 # prints the first item
 echo ${array[0]}
+
+# arr[-1] prints the last element
+echo ${array[-1]}
 
 # print the whole array
 echo ${array[@]}

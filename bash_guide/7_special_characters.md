@@ -2,19 +2,19 @@
 
 ## Special characters
 
-**$** - variable value fetching
+`$` - variable value fetching. Parameter expansion
 
-**"** - string
+`"` - string
 
-**\#** - comment
+`#` - comment
 
 **whitespace** - used for word splitting
 
-**&** - run in background
+`&` - run in background
 
-**;** - statement separator. multiple commands in the same line are separated by **;**
+`;` - statement separator. Used to separte multiple commands in the same line.
 
-**$$** - expands to the PID of the current shell. This is different from `$BASHPID`. In cases where subshells are spawned(piping), `$$` contains PID of parent process, while `$BASHPID` alwyas contains the PID of the current bash shell it is executing in.
+`$$` - expands to the PID of the current shell. This is different from `$BASHPID`. In cases where subshells are spawned(piping), `$$` contains PID of parent process, while `$BASHPID` always contains the PID of the current bash shell it is executing in. This is because `$BASHPID` is a shell variable and it will be local to each shell containing it.
 
 ```bash
 # run editor in background
@@ -27,53 +27,53 @@ echo "hello world"; echo $(pwd);
 
 ## Logical operators
 
-* **&&** - logical AND
-* **||** - logical OR
+* `&&` - logical AND
+* `||` - logical OR
 Commands return exit code **0(zero)** on success.
 
 ```Bash
 cd scripts_dir || mkdir scripts_dir && cd scripts_dir
 ```
 
-## directory traversal
+## Directory traversal
 
-* **~** - home directory of currently logged in user
-* **.** - current directory
-* **..** - parent directory of current directory. parent directory of root directory is itself.
-* **/** - filename/path separator
+* `~` - home directory of currently logged in user
+* `.` - current directory
+* `..` - parent directory of current directory. parent directory of root directory is itself.
+* `/` - filename/path separator
 
 ## Quoting
 
 Use string quoting whereever **word splitting using whitespace** can happen.
 
-* **' '(single quotes)** - represents a string literal. No character has a special meaning inside single quotes.
+* `'` (single quotes) - represents a string literal. No character has a special meaning inside single quotes.
 
-* **" "(double quotes)** - represents string. parameter expansion, arithmetic expansion, command substitution are carried out. Can be thought of similar to **String interpolation** in programming languages
+* `"`(double quotes) - represents string. parameter expansion, arithmetic expansion, command substitution are carried out. Can be thought of similar to **String interpolation** in programming languages
 
-* **\\** - escape character.
+* `\` - escape character.
 
-  ```Bash
-  my_planet="Earth"
-  echo 'The planet that I live in is: ${my_planet}'
-  echo "The planet that I live in is: ${my_planet}"
-  echo "The planet that I live in is: \"${my_planet}\""
-  ```
+```Bash
+my_planet="Earth"
+echo 'The planet that I live in is: ${my_planet}'
+echo "The planet that I live in is: ${my_planet}"
+echo "The planet that I live in is: \"${my_planet}\""
+```
 
 **NOTE**: To avoid any special processing of a string use single quotes, in all other cases use double quotes.
 
 ## Redirection
 
-* **>** - redirects standard output (usually we redirect to a file)
+* `>` - redirects standard output (usually we redirect to a file)
 
-* **>>** - redirects and appends standard output to the target (usually we redirect to a file)
+* `>>` - redirects and appends standard output to the target (usually we redirect to a file)
 
-* **<** - redirects standard input. (read contents of a file)
+* `<` - redirects standard input. (read contents of a file)
 
-* **<<** - Here document. reads string until a delimiter is specified.
+* `<<` - Here document. reads string until a delimiter is specified.
 
-* **<<<** - Here string. reads string that follows immediately
+* `<<<` - Here string. reads string that follows immediately
 
-* **|** - redirects stdout of a command to stdin of another command. Each command/command group is a pipe is executed in its own subshell
+* `|` - redirects stdout of a command to stdin of another command. **Each command/command group in a pipe is executed in its own subshell**
 
 ```Bash
 echo $BASHPID
@@ -82,13 +82,13 @@ echo $BASHPID
 
 ## Groups
 
-* **{} Inline group**  - commands within braces are tread as single command. Space should be given between the  breaces and commands.**Final command must be terminated with semicolon**. Commands executed within current shell's context
+* **`{}` Inline group**  - commands within braces are tread as single command. Space should be given between the  braces and commands.**Final command must be terminated with semicolon**. Commands are executed within current shell's context
 
 ```bash
-cd my_dir || {mkdir my_dir; cd my_dir;}
+cd my_dir || { mkdir my_dir; cd my_dir; }
 ```
 
-* **() command group** - commands within are executed in a separate subshell. subshell variables are not visible to the parent shell. Executing many commands in subshell might slowdown the script execution.
+* **`()` command group** - commands within are executed in a separate subshell. subshell variables are not visible to the parent shell. Executing many commands in subshell might slowdown the script execution.
 
 ```bash
 var1='foo'
@@ -102,7 +102,7 @@ greeting="Hey"
 echo "$greeting, $var1 and $var2"
 ```
 
-**(()) arithmetic expression** - enclosing arithmetic expressions. Bash knows only integer math. Arithmetic expressions when used for condition test **returns 1 on true and 0 on false.**
+**`(())` arithmetic expression** - enclosing arithmetic expressions. Bash knows only integer math. Arithmetic expressions when used for condition test **returns 1 on true and 0 on false.**
 
 ```bash
 x=1;y=2;z=3;

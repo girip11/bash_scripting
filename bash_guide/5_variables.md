@@ -25,7 +25,6 @@ Single quote used to take the value as it is(literal value). Double quotes is us
 name='Girish Pasupathy'
 echo 'My name is $name \"'
 echo "My name is \"$name\""
-echo ${#name} # prints the string length
 ```
 
 Variable value is inferred using `$identifier`. Bash replaces value of the variable against the `$identifier` and the executes the command.
@@ -39,6 +38,72 @@ echo "$movie_name" # retains spacing in the movie_name
 ```
 
 **NOTE**: Always double quote a string which contains any whitespace (space, table or newline).
+
+### Useful string manipulation techniques
+
+> In bash shell, when you use a dollar sign followed by a variable name, shell expands the variable with its value. This feature of shell is called **parameter expansion**.
+
+**NOTE**: Bash **does not** support nested parameter expansions (i.e) `${${first}last}`.
+
+* `${#string}` gives the string length
+* `${string:start_offset:num_chars}` returns substring starting from `start_offset` index taking `num_chars` characters. `start_offset` **cannot be negative**.
+
+```Bash
+text="Hello World"
+
+# string length
+echo ${#text}
+
+# subset from index 3 to end of the string
+echo ${text:3}
+
+# If we specify : and didnt specify a number, the value is taken as 0
+# prints empty string
+echo ${text:3:}
+
+# Takes 5 characters starting from index 0
+echo ${text::5}
+```
+
+* `${string,}` - convert first letter to lowercase
+* `${string,,}` - same as `string.lower()` in python
+
+* `${string^}` - same as `string.capitalize()` in python
+* `${string^^}` - same as `string.upper()` in python
+
+* `${parameter~}` - reverses the case of the first character.
+* `${parameter~~}` - reverses the case of all the characters.
+
+```Bash
+text="hello WoRld"
+
+echo ${text,,} # hello world
+echo ${text^} # Hello WoRld
+echo ${text^^} # HELLO WORLD
+```
+
+* `${string#substring}` - does shortest substring match from the beginning and removes the match from the string.
+* `${string##substring}` - does longest substring match from the beginning and removes the match from the string.
+
+* `${string%substring}` - does shortest substring match from the end and removes the match from the string.
+* `${string%%substring}` - does longest substring match from the end and removes the match from the string.
+* Even though the string is read from the end, the pattern is matched from left to right in `%` and `%%`
+
+```Bash
+url="www.example.com"
+
+echo ${url#*.} # prints example.com
+echo ${url##*.} # prints com
+
+# Notice the pattern is matched from left to right but from the end
+echo ${url%.*} # prints www.example
+echo ${url%%.*} # prints www
+```
+
+* `${string/pattern/replacement}` - Replace first occurence of `pattern` with `replacement`
+* `${string//pattern/replacement}` - Replace all occurences of `pattern` with `replacement`
+* `${string/#pattern/replacement}` - Replace only if the `pattern` matches beginning of the string.
+* `${string/%pattern/replacement}` - Replace only if `pattern` matches the end of the string.
 
 ## Integers
 
