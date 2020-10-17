@@ -1,7 +1,8 @@
 # Chapter-8: Globs
 
-Globs(wildcards) are not regular expressions. These are wildcards for searching files. **Glob characters helps in pathname expansion.**
-If one of the below characters appear, then the word is considered as a pattern and is replaced with matching files sorted **alphabetically**.
+* Globs(wildcards) are not regular expressions. These are wildcards for searching files. **Glob characters helps in pathname expansion**. Pathname expansion is also known as filename expansion.
+
+* If one of the below characters appear, then the word is considered as a pattern and is replaced with matching files sorted **alphabetically**.
 
 **NOTE**: globbing/pathname expansion **doesnot work as expected inside either single or double quotes.**
 
@@ -53,7 +54,7 @@ echo *
 rm *
 ```
 
-**NOTE**: Neither of the above mentioned wilcards match **/**.
+**NOTE**: Neither of the above mentioned wilcards match `/`. When matching a file name, the slash character must always be matched explicitly.
 
 ## `[]` glob
 
@@ -73,6 +74,10 @@ ls /usr/bin/[^e-l]*
 ls /usr/bin/*[\[\]]
 
 ```
+
+## `nocaseglob`
+
+If the shell option `nocaseglob` is enabled, the match is performed without regard to the case of alphabetic characters.
 
 ## null globs
 
@@ -103,6 +108,8 @@ shopt -s dotglob
 # disabling dotglob
 shopt -u dotglob
 ```
+
+> The `GLOBIGNORE` shell variable may be used to restrict the set of file names matching a pattern. If `GLOBIGNORE` is set, each matching file name that also matches one of the patterns in `GLOBIGNORE` is removed from the list of matches. The file names `.` and `..` are always ignored, even when `GLOBIGNORE` is set. However, setting `GLOBIGNORE` has the effect of enabling the dotglob shell option, so all other file names beginning with a `"."` will match. To get the old behavior of ignoring file names beginning with a `"."`, make `".*"` one of the patterns in `GLOBIGNORE`. The dotglob option is disabled when `GLOBIGNORE` is unset. [File name expansion](https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_03_04.html)
 
 ## Extended globs
 
@@ -142,6 +149,8 @@ echo [[:lower:]]*+(l)*@(s|e)
 ```
 
 * `**` - Feature known as **globstar**. Matches all files and zero or more directories and subdirectories. If followed by a `/` it matches only directories and subdirectories. **To work that way it must be the only thing inside the path part e.g. `/myapp/**.js` will not work that way.**
+
+> The ** symbol you're asking about is known as the "globstar". In most unix pattern matching, the * can only represent one directory level. The globstar allows you to specifiy an unknown number of in-between directories. [meaning of `**`](https://stackoverflow.com/questions/21834939/can-someone-explain-what-this-means-js-when-trying-to-fetch-the-src-files-i)
 
 * `{}` - Brace expansion. `**/*.{a,b}` will be expanded to `**/*.a` and `**/*.b`. `**/*.{a..c}` will be expanded to `**/*.a`, `**/*.b` and `**/*.c`. The final result is the union of checking all the expanded patterns.
 

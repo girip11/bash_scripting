@@ -80,6 +80,48 @@ echo $BASHPID
 { echo $BASHPID; echo $BASHPID > pid1.txt; } | echo $BASHPID
 ```
 
+## Here document
+
+Used for embedding text(multiline string) into script. **EOF** is a commonly used delimiter. Supports parameter expansion and command substitution. By default preserves tabs and spacing.
+
+```Bash
+# Syntax
+# data between the DELIMITER redirected to the stdin
+command <<DELIMITER
+data string
+DELIMITER
+
+# Example
+name="Batman"
+cat <<EOF
+  Character name is $name
+EOF
+
+# prevent parameter substitution(expansion) by quoting the starting DELIMITER
+cat <<'EOF'
+  Character name is $name
+EOF
+
+# ignore leading tabs by prefixing the starting delimiter with **-**
+# leading spaces are unaffected. Also this does not remove embedded \t
+cat <<-EOF
+    Character name is $name
+EOF
+```
+
+## Here string
+
+Places single line of string to the stdin of the command. Supports **parameter expansion** within **double quoted strings**.
+
+```Bash
+# Syntax
+command <<< "Input string"
+
+# example.
+# for this to work, the command should read its input from the **stdin**
+cat <<< "Print this to console"
+```
+
 ## Groups
 
 * **`{}` Inline group**  - commands within braces are tread as single command. Space should be given between the  braces and commands.**Final command must be terminated with semicolon**. Commands are executed within current shell's context
