@@ -5,12 +5,41 @@ SIGINT -  Keyboard interrupt. `ctrl + c`
 
 ## While
 
+Using a while-loop is generally the recommended way in Bash for iterating over each line of a file or stream.
+
 ```Bash
 # Syntax
-while condition
+while test_condition
 do
   # Statements
 done
+
+while (( i < 10 ))
+do
+  # logic
+  i+=1
+done
+```
+
+Example
+
+```Bash
+# infinite loop
+while : ; do echo "infinite loop"; done
+
+content=$(cat <<EOF
+hello world
+foo bar
+fizz buzz
+EOF
+)
+
+# read each line
+# stops when no more lines are to read
+while read line
+do
+echo $line
+done <<< "$content"
 ```
 
 ## Until
@@ -22,6 +51,8 @@ until condition
 do
   # Statements
 done
+
+until false; do echo "infinite loop"; done
 ```
 
 ## For
@@ -46,22 +77,28 @@ do
 done
 
 # example
-for i in {0..9}
+# step by 2
+for i in {0..10..2}
 do
   echo $i
 done
+
+# infinite loop
+for ((;;)); do echo "infinite loop"; done
 ```
 
 ## Break
 
-To jump out of loop (exit loop) use the **break** statement.
+To jump out of loop (exit loop) use the `break` statement.
 
 ## Continue
 
-To skip a loop iteration use the **continue** statement.
+To skip a loop iteration use the `continue` statement.
 
 ---
 
 ## References
 
 * [Bash Guide by Joseph Deveau](https://www.amazon.in/BASH-Guide-Joseph-DeVeau-ebook/dp/B01F8AZ1LE/ref=sr_1_4?keywords=bash&qid=1564983319&s=digital-text&sr=1-4)
+
+* [Bash loops](https://www.shell-tips.com/bash/loops/)
