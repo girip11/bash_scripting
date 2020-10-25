@@ -126,7 +126,7 @@ echo $((a + b * c - 100))
 unset a b c
 ```
 
-[!Bash arithmetic operators](./bash_arithmetic_operators.png)
+![Bash arithmetic operators](./bash_arithmetic_operators.png)
 
 Bash performs only **integer math**. Bash **doesnot** know about floats, long, doubles. For floating point arithmetic, we need to use external library like **bc**.
 
