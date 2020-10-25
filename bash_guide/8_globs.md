@@ -72,14 +72,21 @@ ls /usr/bin/[^e-l]*
 
 # special characters like itself in the pattern [] requires escaping
 ls /usr/bin/*[\[\]]
-
 ```
 
-## `nocaseglob`
+## `shopt` builtin
+
+`shopt` shell builtin is used to set or unset the following glob options.
+
+## `nocaseglob` option
 
 If the shell option `nocaseglob` is enabled, the match is performed without regard to the case of alphabetic characters.
 
-## null globs
+## `failglob` option
+
+* If the failglob shell option is set, and no matches are found, an error message is printed and the command is not executed.
+
+## `nullglob` option
 
 when a glob doesnot match any of the filenames, glob matches itself (i.e) glob expands to itself. But if nullglob shell option is enabled, **the glob incase of no match expands to null instead of itself.**
 
@@ -97,7 +104,7 @@ done
 
 **nullglob** can be disabled/unset using the shell option `shopt -u nullglob`
 
-## dot glob
+## `dotglob` option
 
 If this shell option is set, bash includes the files starting with **.** in the results of pathname expansion.
 
@@ -111,7 +118,7 @@ shopt -u dotglob
 
 > The `GLOBIGNORE` shell variable may be used to restrict the set of file names matching a pattern. If `GLOBIGNORE` is set, each matching file name that also matches one of the patterns in `GLOBIGNORE` is removed from the list of matches. The file names `.` and `..` are always ignored, even when `GLOBIGNORE` is set. However, setting `GLOBIGNORE` has the effect of enabling the dotglob shell option, so all other file names beginning with a `"."` will match. To get the old behavior of ignoring file names beginning with a `"."`, make `".*"` one of the patterns in `GLOBIGNORE`. The dotglob option is disabled when `GLOBIGNORE` is unset. [File name expansion](https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_03_04.html)
 
-## Extended globs
+## Extended globs using `extglob` option
 
 Extended globs allow for pattern matching, while normal globs allow for matching individual characters.
 
@@ -160,6 +167,7 @@ To play with globs we can use [globster](https://globster.xyz/)
 
 ## References
 
+* [Filename expansion](https://www.gnu.org/software/bash/manual/html_node/Filename-Expansion.html)
 * [Bash Guide by Joseph Deveau](https://www.amazon.in/BASH-Guide-Joseph-DeVeau-ebook/dp/B01F8AZ1LE/ref=sr_1_4?keywords=bash&qid=1564983319&s=digital-text&sr=1-4)
 * [nullglob](https://www.cyberciti.biz/faq/bash-shell-check-for-any-mp3-files-in-directory/)
 * [Extended globs](https://www.linuxjournal.com/content/bash-extended-globbing)

@@ -154,7 +154,7 @@ echo $((result == 7))
 echo $(($result == 7)) # in arithmetic expression parameter dereferencing($) is optional
 ```
 
-**NOTE**: Commands groups and arithmetic expression can be expanded by preceding them with **$**. This is referred to as **command substitution and arithmetic expansion** respectively.
+**NOTE**: Commands groups and arithmetic expression can be expanded by preceding them with `$`. This is referred to as **command substitution and arithmetic expansion** respectively.
 
 ## `let` built-in
 
@@ -177,7 +177,7 @@ Bash understands only integers. We need to use external utility like **bc** for 
 
 ## read builtin
 
-Reads a line of text from standard input. **newline** is considered as the end of line. But it can be changed using **-d** option. After reading the line, read performs word splitting as per IFS (Internal Field Separators). Value read is assigned to the variable used in the command. If no variable is used, the value is stored in the variable called **REPLY**.
+Reads a line of text from standard input. **newline** is considered as the end of line. But it can be changed using **-d** option. After reading the line, read performs word splitting as per `IFS` (Internal Field Separators). Value read is assigned to the variable used in the command. If no variable is used, the value is stored in the variable called **REPLY**.
 **read** returns non zero exit code(failure) when EOF (Ctrl + D) is encountered.
 
 `help read` for more information on read builtin.
@@ -190,8 +190,8 @@ Some of the important options are
 * **-p prompt** - before starting to read, print the prompt on console
 * **-i initial_text** - use this as initial text when reading from console using option **-e**.
 * **-s** - silent. Dont display text typed on screen
-* **-t** - timeout in seconds. can be a fraction. if not specified, default value is taken from shell variable **TMOUT** if available. If timeout is 0, read returns success if input was avaiable to read.
-* **-u** - read from file desscriptor instead of standard input
+* **-t** - timeout in seconds. can be a fraction. if not specified, default value is taken from shell variable **TMOUT** if available. If timeout is 0, read returns success if input was available to read.
+* **-u** - read from file descriptor instead of standard input
 
 ```Bash
 # reads input type and stores as array in variable words

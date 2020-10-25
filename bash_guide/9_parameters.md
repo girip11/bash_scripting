@@ -62,7 +62,7 @@ Pattern can be made of **simple globs or extended globs**
 * `${parameter%pattern}` -find the first occurrence of the pattern from end to start and remove the pattern.
 * `${parameter%%pattern}` - finds all the occurrence of the pattern from end to start and removes the pattern.
 
-## search and replace
+## Search and Replace
 
 Pattern can be made of **simple globs or extended globs**
 

@@ -1,14 +1,33 @@
 # Shell expansions
 
-The `$` character introduces parameter expansion, command substitution, or arithmetic expansion.
+## Metacharacters and various shell expansions
 
-## Tilde expansion
+> A character that, when unquoted, separates words. A metacharacter is a space, tab, newline, or one of the following characters: `|, &, ;, (, ), <, >`.
 
-* `~+` - Shell variable `PWD` replaces the `~` prefix
-* `~-` - Shell variable `OLDPWD` replaces the `~` prefix
-* `~/Downloads` - Shell variable `HOME` replaces `~`.  If `HOME` is unset, the home directory of the user executing the shell is substituted instead.
+## [Shell operation](https://unix.stackexchange.com/questions/388345/behaviour-of-bash-command-substitution-with-command-from-string-in-variable)
 
-## Brace expansion
+> The brief description of the shell’s operation when it reads and executes a command. Basically, the shell does the following:
+>
+> 1. Reads its input.
+> 2. Breaks the input into words and operators, obeying the quoting rules. These tokens are separated by metacharacters.
+> 3. Parses the tokens into simple and compound commands.
+> 4. Performs the various shell expansions.
+> 5. Performs any necessary redirections.
+> 6. Executes the command
+
+All the below mentioned expansions happen at step 4.
+
+> There are seven kinds of expansion. The order of expansions is:
+>
+> 1. Brace expansion,
+> 2. Tilde expansion,
+> 3. Parameter and variable expansion,
+> 4. Arithmetic expansion and
+> 5. Command substitution (done in a left-to-right fashion)
+> 6. Word splitting and
+> 7. Filename expansion
+
+## 1. Brace expansion
 
 **{}** expands the character sequence present inside the braces. Can expand the sequences in ascending as well as descending order.
 
@@ -40,11 +59,21 @@ echo $file
 done
 ```
 
-## Parameter Expansion
+## 2. Tilde expansion
+
+* `~+` - Shell variable `PWD` replaces the `~` prefix
+* `~-` - Shell variable `OLDPWD` replaces the `~` prefix
+* `~/Downloads` - Shell variable `HOME` replaces `~`.  If `HOME` is unset, the home directory of the user executing the shell is substituted instead.
+
+## `$` expansions
+
+The `$` character introduces parameter expansion, command substitution, or arithmetic expansion.
+
+### 3. Parameter Expansion
 
 > * The parameter name or symbol to be expanded may be enclosed in braces, which are optional but serve to protect the variable to be expanded from characters immediately following it which could be interpreted as part of the name.
 > * The basic form of parameter expansion is `"${PARAMETER}"`.
-> * The braces are required when "PARAMETER" is a positional parameter with more than one digit,(`$10`) or when "PARAMETER" is followed by a character that is not to be interpreted as part of its name (`${name}:Hello`).
+> * The braces are required when "PARAMETER" is a positional parameter with more than one digit,(`${10}`) or when "PARAMETER" is followed by a character that is not to be interpreted as part of its name (`${name}:Hello`).
 > -[Parameter expansion](https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_03_04.html)
 
 ```Bash
@@ -57,16 +86,32 @@ echo "${BASHPID}, is current bash process id"
 * > If the first character of "PARAMETER" is an exclamation point, Bash uses the value of the variable formed from the rest of "PARAMETER" as the name of the variable; this variable is then expanded and that value is used in the rest of the substitution, rather than the value of "PARAMETER" itself. This is known as **indirect expansion**.
 
 ```Bash
-# first B* is considered as the name of the variable and it
-# is expanded to match all the variable names (names of shell variables declared in lo) in the current shell scope
+name='John Doe'
+name_ref='name'
+# prints John Doe
+echo "${!name_ref}"
+```
+
+* Indirect expansion can be used to get all the shell variables starting with a pattern (but pattern is very restricted match can be made only at the beginning).
+
+```Bash
+# first BASH* is considered as the name of the variable and it
+# is expanded to match all the variable names in the current shell scope
 # starting with B and those matched names get substituted.
 
 BOX=1
-echo ${!B*}
-# Outputs BASH BASHOPTS BASHPID BASH_ALIASES BASH_ARGC BASH_ARGV BASH_ARGV0 BASH_CMDS BASH_COMMAND BASH_LINENO BASH_SOURCE BASH_SUBSHELL BASH_VERSINFO BASH_VERSION BOX
+echo ${!BASH*}
+# Outputs BASH BASHOPTS BASHPID BASH_ALIASES BASH_ARGC BASH_ARGV BASH_ARGV0
+# BASH_CMDS BASH_COMMAND BASH_LINENO BASH_SOURCE BASH_SUBSHELL BASH_VERSINFO
+# BASH_VERSION BOX
+
+# but the above results can be better achieved with compgen shell builtin
+# with greater flexibility
+compgen -v BASH
+
 ```
 
-## Arithmetic Expansion
+### 4. Arithmetic Expansion
 
 `(())` - This is arithmetic expression. `$(())` is arithmetic expansion. In arithmetic expansion, `$(())` is replaced with the result of the arithmetic expression.
 
@@ -94,12 +139,12 @@ Bash performs only **integer math**. Bash **doesnot** know about floats, long, d
 echo $[ 10 * 15 ]
 ```
 
-## Command Substitution
+### 5. Command Substitution
 
 `$()` or ``(backticks) - command substitution.
 
 * Creates a **subshell**, passes the expression inside `$()` or backticks, replaces the same with the stdout of the evaluated expression.
-* Backticks usage not recommended because it is **not POSIX** compatible as well as it cannot be nested as elegantly like `$(cmd1 $(cmd2))` is permitted.
+* Backticks usage not recommended because it is **not POSIX** compatible as well as it cannot be nested as elegantly like `$(cmd1 $(cmd2))`.
 
 ```Bash
 echo $(pwd)
@@ -116,9 +161,9 @@ echo "$(echo "user:$(whoami)")"
 echo $(echo $BASHPID) $BASHPID
 ```
 
-## Word splitting
+## 6. Word splitting
 
-* The shell scans the results of parameter expansion, command substitution, and arithmetic expansion **that did not occur within double quotes** for word splitting.
+> The shell scans the results of parameter expansion, command substitution, and arithmetic expansion **that did not occur within double quotes** for word splitting followed by filename expansion.
 
 * For word splitting, shell variable `IFS` is used. By default `IFS` is set to `'<space><tab><newline>'`. If `IFS` is set to `null`, no word splitting occurs.
 
@@ -136,12 +181,35 @@ echo $(echo "user:     $(whoami)")
 OLDIFS=IFS
 IFS=
 echo $(echo "user:     $(whoami)")
-# notice on word splitting happens
+# notice no word splitting happens
 # +++ whoami
 # ++ echo 'user:     root'
 # + echo 'user:     root'
 # user:     root
 ```
+
+## 7. Filename expansion
+
+* `set -o noglob` or `set -f` disables filename expansion.
+* Filename expansion is not done on double quoted strings.
+* Expands glob patterns to matching file names in the current working directory and the matched filenames are sorted in alphabetical order.
+
+```Bash
+pattern="t*   s*"
+# parameter substitution happens
+# word splitting is done next
+# command becomes `echo t* s*`
+# filename expansion follows next
+# this command prints all the filenames starting with t and s
+echo $pattern
+
+# no word splitting and no filename expansion since the result
+# is enclosed within double quotes.
+# prints 't*   s*'
+echo "$pattern"
+```
+
+**NOTE** - Parameter expansion, arithmetic expansion and command substitution happen only in strings enclosed within double quotes.
 
 ---
 
