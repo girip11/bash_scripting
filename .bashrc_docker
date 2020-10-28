@@ -70,12 +70,8 @@ export SHORT_HOSTNAME=$(hostname -s)
 source "$BASH_IT"/bash_it.sh
 
 # Fzf for fuzzy completions
-if [[ -f /usr/share/fzf/examples/key-bindings.bash ]]; then
-  source "/usr/share/fzf/examples/key-bindings.bash"
-fi
-
-if [[ -f "/usr/share/fzf/examples/completion.bash" ]]; then
-  source "/usr/share/fzf/examples/completion.bash"
+if [[ -f /usr/share/fzf/key-bindings.bash ]]; then
+  source "/usr/share/fzf/key-bindings.bash"
 fi
 
 # Load bash-completion
