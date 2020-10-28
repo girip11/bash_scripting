@@ -33,11 +33,24 @@ set +xv
 echo $-
 ```
 
+## Strict shelle execution mode
+
+```Bash
+# exit if any of the commands return with non zero exit code
+set -e
+
+# exit if unset variable is substituted
+set -u
+
+# Fail the pipe as soon as a command exits with non zero exit code
+set -o pipefail
+```
+
 ## Shell prompts
 
-**$** - Bourne, Bash, POSIX or Korn shell
-**%** - csh or zsh shell
-**\#** - executing commands as root user
+`$` - Bourne, Bash, POSIX or Korn shell
+`%` - csh or zsh shell
+`#` - executing commands as root user
 
 ## Command help within the shell
 

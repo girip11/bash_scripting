@@ -5,12 +5,13 @@
 
 ## Positional and special parameters
 
-* **\$1** - positional
-* **\$?** - special parameters.
+* `$1` - positional
+* `$?` - special parameters.
 
 ## Shell variables
 
-shell variables are local to shell while environment variables are system wide.
+* Shell variables are local to shell while environment variables are system wide.
+* Shell variables when exported become environment variables and are available to the child processes spawned by the parent process in which the shell variable was exported.
 
 ## Environment variables
 
@@ -19,9 +20,15 @@ To list all environment variables in a shell use `printenv` command. (`man print
 ```Bash
 # Prints all environment variables
 printenv
+
+# print the value of specific environment variable
+printenv HOME
+
+# env is mostly used for manipulating environment variables
+# when executing commands
 env
 
-# List all SHELL  variables
+# List all SHELL variables
 # =================================
 declare -p
 
@@ -50,17 +57,12 @@ Commonly used ones are listed below. For exhaustive list refer the book.
 * `unset` - remove the environment variable.
 
 ```Bash
-# complete list of environment variables
-printenv
-
-# get the currently set value of the environment variable
-printenv USER
-
 # add my_dir to PATH
 export PATH="$HOME/my_dir:$PATH"
 
 # unset SHELL and add bash as the new value
 unset SHELL
+
 export SHELL="/bin/bash"
 ```
 
@@ -68,14 +70,12 @@ export SHELL="/bin/bash"
 
 Changes made to environment variables are valid only during the lifetime of the shell program unless persisted in one of the below files.
 
-* ~/.pam_environment
-* ~/.bashrc
-* ~/.profile
-* /etc/environment
+* `~/.pam_environment`
+* `~/.bashrc`
+* `~/.profile`
+* `/etc/environment`
 
-Current user login and logout to reflect changes in evnironment variable.
-
-* In scripts use **source** or **exec** to reread/refresh environment changes.
+* In scripts use **source** or **exec** to reread/refresh the environment changes.
 
 ```Bash
 source <path to script containing environment variables>
@@ -87,21 +87,27 @@ exec bash
 
 ## Standard streams
 
-* stdin
-* stdout
-* stderr
+* stdin (file descriptor 0)
+* stdout (file descriptor 1)
+* stderr (file descriptor 2)
 
 ## File descriptors (FD)
 
 FD - access file, stream ,pipe, socket, device, network interface etc.
 
-* abstraction between the hardware device and the device file created by kernel(/dev directory).
+* File descriptor is an abstraction between the hardware device and the device file created by kernel(ex: `/dev` directory).
 
 | stream | Default  | FD  |
 | ------ | -------- | --- |
 | stdin  | keyboard | 0   |
 | stdout | console  | 1   |
 | stderr | console  | 2   |
+
+* To redirect from a file descriptor to stdin `<&fd` or `0<&fd` is used.
+
+* To redirect from stdout to a file descriptor `>&fd` or `1>&fd` is used.
+
+* To close a file descriptor `fd>&-`
 
 ## Reading using custom file descriptors
 
@@ -136,19 +142,20 @@ exec 3>&-
 # open a file for writing
 exec 4>file
 
-# redirecting stdout
+# redirecting stdout same as 1>&4
 echo "hello world" >&4
 
 # closing the file using the file descriptor
 exec 4>&-
 ```
 
-Opening a file for reading and writing using file descriptor is done using the **<>** diamond operator.
+Opening a file for reading and writing using file descriptor is done using the `<>` diamond operator.
 
 ```Bash
 exec 3<>file
+
 # writing
-echo "hello world" >file
+echo "hello world" >&3
 
 # reading from file
 read -u 3 line
@@ -159,20 +166,18 @@ exec 3>&-
 
 ## File redirection
 
-Output redirection carried out using **>** or **>>**. Ex: redirect output of a program from console(default) to a file.
+Output redirection carried out using `>` or `>>`. Ex: redirect output of a program from console(default) to a file.
 
-* Redirection to file using **>** - creates non existent file and overwrites the existing file.
+* Redirection to file using `>` - creates non existent file and overwrites the existing file.
 
-* Redirection to file using **>>** - creates non existent file and appends to the existing file.
-
-* Just **>& or &>** redirects stderr to stdout, for instance `command >&file`
+* Redirection to file using `>>` - creates non existent file and appends to the existing file.
 
 ```Bash
 # output written to file and not on console.
 echo "Hello world" > output.txt
 ```
 
-Input redirection is done using **<**.
+Input redirection is done using `<`.
 
 ```Bash
 # reads the content of file output.txt
@@ -200,23 +205,25 @@ cat < output.txt
 cat 0< output.txt
 ```
 
-**/dev/null** - null device (discards anything written to it). When output and error are to be ignored, redirect stdout and stderr to this.
+* `/dev/null` - null device (discards anything written to it). When output and error are to be ignored, redirect stdout and stderr to this.
 
-Redirect stderr to stdout using **FD1>&FD2**. File descriptors are read from **left to right**
+* Redirect stderr (file descriptor is 2) to stdout (file descriptor is 1) using `2>&1`. File descriptors are read from **left to right**
+
+* Just `>&` or `&>` redirects stderr to stdout (same as `2>&1`).
 
 ```Bash
 # common use case. ignore stdout and stderr
 ./my_script.sh > /dev/null 2>&1
 
 # shorthand notation for above command
-./my_script.sh &>/dev/null
+./my_script.sh >&/dev/null
 
-# common use case. redirect both stdout and stderr to a file. this is the **correct** version
+# common use case. redirect both stdout and stderr to a file. this is the **CORRECT** version
 # 1. redirect FD1 to file
 # 2. duplicate FD1 and place it in place of FD2
 ./my_script.sh > my_script.log 2>&1
 
-# below version is **not correct**
+# below version is **INCORRECT**
 # 1. duplicate FD1 and place it in place of FD2
 # 2. redirect FD1 to file
 # because duplication happened before redirection, FD2 never gets redirected to FD1
@@ -225,58 +232,17 @@ Redirect stderr to stdout using **FD1>&FD2**. File descriptors are read from **l
 ./my_script.sh 2>&1 > my_script.log
 ```
 
-## Here document
-
-Used for embedding text(multiline string) into script. **EOF** is a commonly used delimiter. **supports parameter substitution**. By default preserves tabs and spacing.
-
-```Bash
-# Syntax
-# data between the DELIMITER redirected to the stdin
-command <<DELIMITER
-data string
-DELIMITER
-
-# Example
-name="Batman"
-cat <<EOF
-  Character name is $name
-EOF
-
-# prevent parameter substitution by quoting the starting DELIMITER
-cat <<"EOF"
-  Character name is $name
-EOF
-
-# ignore spacing by prefixing the starting delimiter with **-**
-cat <<- EOF
-  Character  name is $name
-EOF
-```
-
-## Here string
-
-Places single line of string to the stdin of the command. Supports **parameter substitution** within **double quoted strings**.
-
-```Bash
-# Syntax
-command <<< "Input string"
-
-# example.
-# for this to work, the command should read its input from the **stdin**
-cat <<< "Print this to console"
-```
-
 ## FIFO(named pipe)
 
 **F**irst **I**n **F**irst **O**ut. Create FIFO using `mkfifo` command. No contents stored on the file system. Kernel passes the data internally.
 
-* FIFO blocked by read operation, until a write operation it remains blocked and vice versa.
+* FIFO blocks the read operation, until a write operation happens and vice versa.
 
-* FIFO file have user permissions.
+* FIFO file have user permissions. `[[ -p FILE ]]` checks is the file is a named pipe.
 
 ## Pipe
 
-Connects stdout of one command to stdin of another. Each command following a pipe is executed in its subshell.
+Connects stdout of one command to stdin of another. Each command following a pipe is executed in its subshell. `set -o pipefail` makes the pipe fail as soon as any command in the pipeline fails with non zero exit code.
 
 ```Bash
 # stdout of first command to stdin of second command
@@ -300,8 +266,8 @@ Allows to pipe stdout of multiple commands to another command.
 ```Bash
 # syntax
 # no space between > and ()
-command <(list)
-command >(list)
+cmd <(list)
+cmd >(list)
 
 # example
 # comm is a command to compare two sorted files
@@ -310,18 +276,24 @@ command >(list)
 comm -3 <(sort file1 | uniq) <(sort file2 | uniq)
 ```
 
-Bash replaces <() or >() with a file descriptor of a named pipe that it created. command will be writing to the named pipe while the **list** inside () will be connected to the same named pipe awaiting any input available for read.
+Bash replaces `<()` or `>()` with a file descriptor of a **named pipe** that it created.
 
 In process substitution, bash handles the FIFO files.
 
-* Input substitution - **<()**
-* Output substitution - **>()**
+* Input substitution `consumer_cmd <(producer_cmd)` - `consumer_cmd` reads from the named pipe while the `producer_cmd` writes to the named pipe.
+* Output substitution `producer_cmd >(consumer_cmd)`
 
 ```Bash
-# in the output, observe the file descriptor created and used by bash to execute this command.
-wc -l <(cat planets.txt)
+# In the output, observe the file descriptor created and used by bash to execute this command.
+wc -l < <(cat planets.txt)
 
-wc -l <(grep -i "ar" planets.txt)
+# Contents of namedpipe for <(grep -i "ar" planets.txt) will
+# be redirected to stdin of the wc command
+wc -l < <(grep -i "ar" planets.txt)
+
+# stdout of echo will be redirected to the named pipe for  >(cat)
+# cat command will read from that named pipe.
+echo "hello world" > >(cat)
 ```
 
 Redirecting stdout to one command while redirecting stderr to another command using process substitution is possible
@@ -330,7 +302,7 @@ Redirecting stdout to one command while redirecting stderr to another command us
 # bash replaces >() with a file descriptor.
 # command inside >() listens to the file descriptor(blocked till someone writes)
 # when the command executes, the output and error gets redirected to respective files and those commands get unblocked.
-command > >(stdout_cmd) 2> >(stderr_cmd)
+cmd > >(stdout_cmd) 2> >(stderr_cmd)
 
 # after FD replacement above command looks as
 # command 1> fifo_file1 2> fifo_file2
@@ -338,28 +310,18 @@ command > >(stdout_cmd) 2> >(stderr_cmd)
 
 ## tee utility
 
-tee takes an input stream and duplicates it to a file and stdout.
+`tee` takes an input stream and duplicates it to a **file and stdout**.
 
 ```Bash
 # command -> tee -> stdout
 #             |
 #           file
-command | tee file
+cmd | tee file
 ```
 
-## **read** built-in construct
+## `read` shell built-in
 
 * read data from stdin, file or file descriptors into a variable. Refer [Chapter_7](./chapter_7.md)
-
-## swap stdout and stderr
-
-```Bash
-# duplicate FD3 to stdout
-# duplicate FD1 to stderr
-# duplicate FD2 to stdout
-# close the FD3
-command 3>&1 1>&2 2>&1 3>&-
-```
 
 ---
 
