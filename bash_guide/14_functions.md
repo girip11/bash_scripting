@@ -24,9 +24,9 @@ simple_function
 
 Function call is equivalent to a command. Nesting of functions is possible.
 
-Functions can access and modify global variables. local variables inside a function are not visible outside. local variables are defined using the `local` keyword.
+Functions can access and modify global variables. local variables inside a function are not visible outside. local variables are defined using the `local` keyword. Any variable defined inside a function using `declare` builtin will be local by default.
 
-Before a function is called, all variables defined inside the function are invisible outside that function. Inside a function, local variable hides the global variables with the same name. Without the **local** keyword, variable inside the function becomes **globally available to that script**.
+Inside a function, local variable hides the global variables with the same name. Without the **local** keyword, variable inside the function becomes **globally available to that script**.
 
 ```Bash
 function print_message(){
@@ -89,12 +89,36 @@ declare -p lang_array
 loop_over_array "${lang_array[@]}"
 ```
 
-## Passing associative array to function as name reference
+Above approach can be used when we don't want the function to modify the source array.
 
-Below approach can be used for arrays as well as associative arrays.
+## Passing indexed and associative array to function as name reference
+
+This approach can be used for arrays as well as associative arrays. When we use name reference, any modification on the name reference is reflected on the underlying variable. So this approach can be used to pass when we want the target function to populate some data and return it.
+
+* Indexed arrays can also be passed to [functions via name reference](https://unix.stackexchange.com/questions/510715/what-is-a-name-reference-variable-attribute).
 
 ```Bash
-# This is suppoted from bash 4.3
+function loop_over_array() {
+  declare -n languages="$1"
+
+  for lang in "${languages[@]}"
+  do
+    echo "Language: $lang"
+  done
+
+  languages+=("typescript")
+}
+
+lang_array=("ruby" "python" "javascript" "php" "c" "c++")
+declare -p lang_array
+loop_over_array lang_array
+echo "${lang_array[@]}"
+```
+
+* Associative arrays can also be passed to functions as name reference
+
+```Bash
+# This is supported from bash 4.3
 
 # using name reference, we can even modify the associative array
 function loop_over_dict() {
@@ -122,7 +146,9 @@ unset -v person
 
 ## Functions returning values
 
-Functions in bash does not return any value. Returns just the exit code. One appraoach is to use global variables **RESULT**, **EXCEPTION** and **EXCEPTION_MSG** to store the result, error code and error message respectively.
+* Functions in bash does not return any value. Returns just the exit code.
+
+* One approach is to use global variables **RESULT**, **EXCEPTION** and **EXCEPTION_MSG** to store the result, error code and error message respectively.
 
 ```Bash
 function get_value() {
@@ -150,6 +176,19 @@ function to_upper() {
 
 to_upper "hello"
 echo "$RESULT"
+```
+
+* Another approach is to use `echo` to return a string and use command subtitution to get the return value.
+
+```Bash
+function say_hello() {
+  if [[ $# -gt 0 ]]; then
+    echo "Hello, $1"
+  fi
+}
+
+res=$(say_hello Jane)
+echo "$res"
 ```
 
 ---

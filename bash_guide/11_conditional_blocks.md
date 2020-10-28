@@ -52,6 +52,12 @@ then
   echo "hello"
 fi
 
+# using arithmetic expressions
+if (( 10 > 5 ))
+then
+  echo "hello"
+fi
+
 # multiple conditions syntax
 if expression_1
 then
