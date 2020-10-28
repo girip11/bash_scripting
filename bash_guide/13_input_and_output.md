@@ -284,8 +284,21 @@ In process substitution, bash handles the FIFO files.
 * Output substitution `producer_cmd >(consumer_cmd)`
 
 ```Bash
-# In the output, observe the file descriptor created and used by bash to execute this command.
-wc -l < <(cat planets.txt)
+
+# USAGE
+# ======
+
+# 1. Process substitution can be used in command which operate on files
+# Here cat command will read from the named pipe created by bash for
+# `<(echo "hello world")`
+cat <(echo "hello world")
+
+# In the output, observe the file descriptor created and used by bash to execute this command. wc directly reads from the named pipe.
+wc -l <(cat planets.txt)
+
+# 2. In this case contents of the named pipe are redirected to stdin of cat
+# command.
+cat < <(echo "hello world")
 
 # Contents of namedpipe for <(grep -i "ar" planets.txt) will
 # be redirected to stdin of the wc command
