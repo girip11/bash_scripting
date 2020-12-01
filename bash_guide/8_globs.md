@@ -157,7 +157,9 @@ echo [[:lower:]]*+(l)*@(s|e)
 
 * `**` - Feature known as **globstar**. Matches all files and zero or more directories and subdirectories. If followed by a `/` it matches only directories and subdirectories. **To work that way it must be the only thing inside the path part e.g. `/myapp/**.js` will not work that way.**
 
-> The ** symbol you're asking about is known as the "globstar". In most unix pattern matching, the * can only represent one directory level. The globstar allows you to specifiy an unknown number of in-between directories. [meaning of `**`](https://stackoverflow.com/questions/21834939/can-someone-explain-what-this-means-js-when-trying-to-fetch-the-src-files-i)
+* `[[ -o globstar ]]` can be used to check if the **globstar** is enabled. `shopt -s globstar` is used to enable **globstar**.
+
+> The `**` symbol you're asking about is known as the "globstar". In most unix pattern matching, the * can only represent one directory level. The globstar allows you to specifiy an unknown number of in-between directories. [meaning of `**`](https://stackoverflow.com/questions/21834939/can-someone-explain-what-this-means-js-when-trying-to-fetch-the-src-files-i)
 
 * `{}` - Brace expansion. `**/*.{a,b}` will be expanded to `**/*.a` and `**/*.b`. `**/*.{a..c}` will be expanded to `**/*.a`, `**/*.b` and `**/*.c`. The final result is the union of checking all the expanded patterns.
 
