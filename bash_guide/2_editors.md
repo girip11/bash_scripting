@@ -5,7 +5,7 @@
 Editors recommended for bash scripting are
 
 * emacs
-* vim
+* [vim](../editors/vim/vim_cheetsheet.md)
 * nano
 * gedit
 
