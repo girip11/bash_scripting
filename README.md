@@ -10,10 +10,12 @@ Any one of these two should help you become comfortable with bash scripting. You
 
 * [Advanced bash scripting guide](https://www.tldp.org/LDP/abs/html/index.html)
 
-## Additional references
+* [Apple's Shell Scripting Primer](https://developer.apple.com/library/archive/documentation/OpenSource/Conceptual/ShellScripting/shell_scripts/shell_scripts.html)
 
-* [Computer hope Bash Basics](https://www.computerhope.com/unix/ubash.htm#command-execution-environment-subshell)
+* [Computerhope Bash Basics](https://www.computerhope.com/unix/ubash.htm#command-execution-environment-subshell)
 
 * [Bash tips](https://www.shell-tips.com/bash/)
 
 There is also the [Bash manual](https://www.gnu.org/software/bash/manual/) which is available in multiple formats.
+
+To practice bash scripting, refer [unix shell](http://rosettacode.org/wiki/Category:UNIX_Shell)
